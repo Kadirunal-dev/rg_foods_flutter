@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "615750033126",
+    "project_id": "chat-bdf61",
+    "storage_bucket": "chat-bdf61.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615750033126:android:028ac7160fed965f5fe527",
+        "android_client_info": {
+          "package_name": "com.chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmjdI7OHRRbR4p1H6Ilp5l0s_xZoWs9kw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:615750033126:android:1f7303f2a998c2af5fe527",
+        "android_client_info": {
+          "package_name": "com.example.rg_food_deneme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmjdI7OHRRbR4p1H6Ilp5l0s_xZoWs9kw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
