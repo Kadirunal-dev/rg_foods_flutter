@@ -138,263 +138,251 @@ class _KullaniciGirisState extends State<KullaniciGiris> {
         toolbarHeight: 55,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 70),
-        child: Expanded(
-          child: Center(
-            child: Expanded(
-              child: Container(
-                width: 361,
-                alignment: Alignment.center,
-
-                child: Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        "KULLANICI GİRİŞİ",
-                        style: AppTextStyles.titleLarge.copyWith(
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      SizedBox(height: 35),
-                      // E-posta veya kullanıcı adı alanı
-                      Focus(
-                        onFocusChange: (hasFocus) {
-                          setState(() {
-                            _isfocused = hasFocus;
-                          });
-                        },
-
-                        child: TextFormField(
-                          focusNode: _UserFocusNode,
-                          style: AppTextStyles.bodymedium16.copyWith(
-                            color: AppColors.textPrimary,
-                          ),
-                          controller: _emailController,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                            } else if (!RegExp(
-                              r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
-                            ).hasMatch(value)) {
-                              return 'Geçerli bir email adresi giriniz';
-                            }
-                            return null;
-                          },
-
-                          keyboardType: TextInputType.emailAddress,
-                          autofillHints: [AutofillHints.email],
-
-                          decoration: InputDecoration(
-                            labelStyle: AppTextStyles.bodymedium16.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                            labelText: "Kullanıcı Adı veya E-posta",
-                            hintText: "example@gmail.com",
-                            hintStyle: AppTextStyles.bodyregular16.copyWith(
-                              color: AppColors.textTertiary,
-                            ),
-                            prefixIcon: Icon(
-                              Icons.email_outlined,
-                              color: _isfocused
-                                  ? AppColors.brandPrimary
-                                  : AppColors.textSecondary,
-                            ),
-
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 20),
-                      // Parola alanı
-                      Focus(
-                        onFocusChange: (hasFocus) {
-                          setState(() {
-                            _isfocused2 = hasFocus;
-                          });
-                        },
-
-                        child: TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                            } else if (value.length < 6) {
-                              return 'Parola en az 6 karakter olmalıdır';
-                            }
-                            return null;
-                          },
-                          enableInteractiveSelection: false,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          obscureText: !isSelected[0],
-                          focusNode: _PasswordFocusNode,
-                          controller: _passwordController,
-                          keyboardType: TextInputType.visiblePassword,
-                          style: AppTextStyles.bodymedium16.copyWith(
-                            color: AppColors.textPrimary,
-                          ),
-                          autofillHints: [AutofillHints.password],
-                          decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                isSelected[0]
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: AppColors.textSecondary,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  isSelected[0] = !isSelected[0];
-                                });
-                              },
-                            ),
-                            labelStyle: AppTextStyles.bodymedium16.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                            hintText: "Parola",
-                            hintStyle: AppTextStyles.bodyregular16.copyWith(
-                              color: AppColors.textTertiary,
-                            ),
-                            labelText: "Parola",
-                            prefixIcon: Icon(
-                              Icons.lock_person,
-                              color: _isfocused2
-                                  ? AppColors.brandPrimary
-                                  : AppColors.textSecondary,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(4),
-                            margin: EdgeInsets.only(right: 8, left: 8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            height: 30,
-                            width: 20,
-                            child: Checkbox(
-                              value: _isAccepted,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  _isAccepted = value ?? false;
-                                });
-                              },
-                              activeColor: AppColors.brandPrimary,
-                              checkColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            "Beni Hatırla",
-                            style: AppTextStyles.bodyregular16.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          SizedBox(width: 90),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Sifreyenileme(),
-                                ),
-                              );
-                              // Şifremi Unuttum işlevi
-                            },
-                            child: Text(
-                              "Şifremi Unuttum",
-                              style: AppTextStyles.bodyregular16.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 35),
-                      ElevatedButton(
-                        onPressed: () async {
-                          bool isSuccess = await loginUser();
-                          if (isSuccess) {
-                            if (_isAccepted == false) {
-                              _emailController.clear();
-                            }
-
-                            // Giriş başarılı, ana sayfaya yönlendir
-
-                            _passwordController.clear();
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                              (Route<dynamic> route) => false,
-                            );
-                          } else {
-                            // Giriş başarısız, hata mesajı göstermek isteyebilirsiniz
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Giriş başarısız oldu."),
-                                duration: Duration(seconds: 1),
-                              ),
-                            );
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.brandPrimary,
-                          minimumSize: Size(double.infinity, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: Text(
-                          "Giriş Yap",
-                          style: AppTextStyles.bodymedium16.copyWith(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 35),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Kayitol()),
-                          );
-                          // Kayıt olma işlevi
-                        },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(double.infinity, 50),
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: AppColors.brandPrimary,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: Text(
-                          "KAYIT OL",
-                          style: AppTextStyles.bodymedium16.copyWith(
-                            color: AppColors.brandPrimary,
-                          ),
-                        ),
-                      ),
-                    ],
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 70),
+        child: Center(
+          child: Container(
+            width: 361,
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                Text(
+                  "KULLANICI GİRİŞİ",
+                  style: AppTextStyles.titleLarge.copyWith(
+                    color: AppColors.textPrimary,
                   ),
                 ),
-              ),
+                const SizedBox(height: 35),
+                // E-posta veya kullanıcı adı alanı
+                Focus(
+                  onFocusChange: (hasFocus) {
+                    setState(() {
+                      _isfocused = hasFocus;
+                    });
+                  },
+
+                  child: TextFormField(
+                    focusNode: _UserFocusNode,
+                    style: AppTextStyles.bodymedium16.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                    controller: _emailController,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                      } else if (!RegExp(
+                        r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
+                      ).hasMatch(value)) {
+                        return 'Geçerli bir email adresi giriniz';
+                      }
+                      return null;
+                    },
+
+                    keyboardType: TextInputType.emailAddress,
+                    autofillHints: [AutofillHints.email],
+
+                    decoration: InputDecoration(
+                      labelStyle: AppTextStyles.bodymedium16.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      labelText: "Kullanıcı Adı veya E-posta",
+                      hintText: "example@gmail.com",
+                      hintStyle: AppTextStyles.bodyregular16.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: _isfocused
+                            ? AppColors.brandPrimary
+                            : AppColors.textSecondary,
+                      ),
+
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+                // Parola alanı
+                Focus(
+                  onFocusChange: (hasFocus) {
+                    setState(() {
+                      _isfocused2 = hasFocus;
+                    });
+                  },
+
+                  child: TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                      } else if (value.length < 6) {
+                        return 'Parola en az 6 karakter olmalıdır';
+                      }
+                      return null;
+                    },
+                    enableInteractiveSelection: false,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    obscureText: !isSelected[0],
+                    focusNode: _PasswordFocusNode,
+                    controller: _passwordController,
+                    keyboardType: TextInputType.visiblePassword,
+                    style: AppTextStyles.bodymedium16.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                    autofillHints: [AutofillHints.password],
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          isSelected[0]
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: AppColors.textSecondary,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isSelected[0] = !isSelected[0];
+                          });
+                        },
+                      ),
+                      labelStyle: AppTextStyles.bodymedium16.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                      hintText: "Parola",
+                      hintStyle: AppTextStyles.bodyregular16.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
+                      labelText: "Parola",
+                      prefixIcon: Icon(
+                        Icons.lock_person,
+                        color: _isfocused2
+                            ? AppColors.brandPrimary
+                            : AppColors.textSecondary,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 15),
+                Row(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(4),
+                      margin: EdgeInsets.only(right: 8, left: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      height: 30,
+                      width: 20,
+                      child: Checkbox(
+                        value: _isAccepted,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isAccepted = value ?? false;
+                          });
+                        },
+                        activeColor: AppColors.brandPrimary,
+                        checkColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Beni Hatırla",
+                      style: AppTextStyles.bodyregular16.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    SizedBox(width: 90),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Sifreyenileme(),
+                          ),
+                        );
+                        // Şifremi Unuttum işlevi
+                      },
+                      child: Text(
+                        "Şifremi Unuttum",
+                        style: AppTextStyles.bodyregular16.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 35),
+                ElevatedButton(
+                  onPressed: () async {
+                    bool isSuccess = await loginUser();
+                    if (isSuccess) {
+                      if (_isAccepted == false) {
+                        _emailController.clear();
+                      }
+
+                      // Giriş başarılı, ana sayfaya yönlendir
+
+                      _passwordController.clear();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                        (Route<dynamic> route) => false,
+                      );
+                    } else {
+                      // Giriş başarısız, hata mesajı göstermek isteyebilirsiniz
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Giriş başarısız oldu."),
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.brandPrimary,
+                    minimumSize: Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    "Giriş Yap",
+                    style: AppTextStyles.bodymedium16.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 35),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Kayitol()),
+                    );
+                    // Kayıt olma işlevi
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(color: AppColors.brandPrimary, width: 2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text(
+                    "KAYIT OL",
+                    style: AppTextStyles.bodymedium16.copyWith(
+                      color: AppColors.brandPrimary,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
